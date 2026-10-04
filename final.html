@@ -1,0 +1,4059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11A Student Hub</title>
+
+<style>
+:root{
+  --bg:#0d0d0d;
+  --card:#171717;
+  --card2:#1e1e1e;
+  --border:rgba(255,255,255,.08);
+  --text:#f5f5f5;
+  --muted:#969696;
+  --orange:#ff8a3d;
+  --orange2:#ff6723;
+  --green:#45d483;
+  --red:#ff6969;
+  --yellow:#ffd166;
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,138,61,.08),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+/* =========================================
+   DEVELOPER WATERMARK
+   ========================================= */
+
+body::after{
+  content:"DEVELOPER: YOLO";
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) rotate(-18deg);
+
+  color:rgba(255,138,61,.065);
+  font-size:clamp(35px,6vw,90px);
+  font-weight:900;
+  letter-spacing:5px;
+  white-space:nowrap;
+
+  pointer-events:none;
+  user-select:none;
+  z-index:9999;
+
+  text-shadow:
+    0 0 25px rgba(255,138,61,.03);
+}
+
+button,input,textarea,select{
+  font:inherit;
+}
+
+button{cursor:pointer}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:245px;
+  background:#111;
+  border-right:1px solid var(--border);
+  padding:22px 15px;
+  z-index:1000;
+  overflow-y:auto;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:5px 8px 25px;
+}
+
+.logo-icon{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--orange),var(--orange2));
+  color:#111;
+  font-weight:900;
+}
+
+.logo h1{
+  font-size:17px;
+  margin:0;
+}
+
+.logo small{color:var(--muted)}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.nav button{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aaa;
+  padding:13px 12px;
+  border-radius:12px;
+  text-align:left;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  transition:.2s;
+}
+
+.nav button:hover{
+  background:#1b1b1b;
+  color:white;
+}
+
+.nav button.active{
+  background:rgba(255,138,61,.13);
+  color:var(--orange);
+}
+
+.notification-badge{
+  margin-left:auto;
+  min-width:20px;
+  height:20px;
+  border-radius:50px;
+  background:var(--orange);
+  color:#111;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  font-weight:800;
+}
+
+.main{
+  margin-left:245px;
+  padding:28px;
+  min-height:100vh;
+}
+
+.page{
+  display:none;
+  animation:fade .2s ease;
+}
+
+.page.active{display:block}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(4px)}
+  to{opacity:1;transform:none}
+}
+
+.hero{
+  background:
+    linear-gradient(135deg,rgba(255,138,61,.16),rgba(255,103,35,.04)),
+    var(--card);
+  border:1px solid rgba(255,138,61,.18);
+  border-radius:22px;
+  padding:30px;
+  margin-bottom:20px;
+}
+
+.eyebrow{
+  color:var(--orange);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1.5px;
+}
+
+.hero h2{
+  font-size:32px;
+  margin:10px 0;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:700px;
+  line-height:1.7;
+  margin:0;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:15px;
+  margin:8px 0 18px;
+}
+
+.section-title h2{
+  margin:5px 0 0;
+  font-size:25px;
+}
+
+.muted{color:var(--muted)}
+
+.grid{
+  display:grid;
+  gap:16px;
+}
+
+.stats{
+  grid-template-columns:repeat(4,1fr);
+  margin-bottom:20px;
+}
+
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:20px;
+}
+
+.stat-icon{
+  font-size:24px;
+  margin-bottom:10px;
+}
+
+.stat-value{
+  font-size:25px;
+  font-weight:850;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:4px;
+}
+
+.two-col{
+  grid-template-columns:1.4fr 1fr;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.card h3{margin:0 0 8px}
+
+.vacation{
+  background:linear-gradient(
+    135deg,
+    rgba(255,209,102,.13),
+    rgba(255,138,61,.06)
+  );
+  border:1px solid rgba(255,209,102,.2);
+  border-radius:17px;
+  padding:17px 19px;
+  margin-bottom:20px;
+}
+
+.vacation strong{color:var(--yellow)}
+
+.today-box{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+}
+
+.date-big{
+  font-size:30px;
+  font-weight:850;
+}
+
+.classes-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin-top:15px;
+}
+
+.class-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--card2);
+  border-radius:11px;
+  padding:11px 13px;
+}
+
+.period{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.routine-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+}
+
+.day-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:16px;
+}
+
+.day-card.today{
+  border-color:rgba(255,138,61,.55);
+  box-shadow:0 0 0 1px rgba(255,138,61,.08);
+}
+
+.day-name{
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.today-tag{
+  display:inline-block;
+  color:#111;
+  background:var(--orange);
+  border-radius:30px;
+  padding:3px 7px;
+  font-size:9px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.routine-item{
+  background:var(--card2);
+  border-radius:10px;
+  padding:10px;
+  margin-top:8px;
+  font-size:13px;
+}
+
+.subject-grid{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.subject-card{
+  min-height:150px;
+  position:relative;
+  overflow:hidden;
+}
+
+.subject-number{
+  position:absolute;
+  right:15px;
+  top:10px;
+  color:rgba(255,138,61,.14);
+  font-size:55px;
+  font-weight:900;
+}
+
+.subject-card h3{
+  position:relative;
+  margin-top:30px;
+}
+
+.subject-card p{
+  color:var(--muted);
+  line-height:1.5;
+  font-size:13px;
+}
+
+.calendar-frame{
+  width:100%;
+  height:420px;
+  border:0;
+  border-radius:14px;
+  background:white;
+}
+
+.holiday-frame{
+  width:100%;
+  height:380px;
+  border:0;
+  border-radius:14px;
+  background:white;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin:14px 0 7px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  background:#111;
+  color:white;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:12px 13px;
+  outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:rgba(255,138,61,.55);
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+input[type=file]{padding:10px}
+
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:11px 15px;
+  font-weight:750;
+  transition:.2s;
+}
+
+.btn-primary{
+  background:linear-gradient(
+    135deg,
+    var(--orange),
+    var(--orange2)
+  );
+  color:#111;
+}
+
+.btn-secondary{
+  background:#252525;
+  color:white;
+  border:1px solid var(--border);
+}
+
+.btn-danger{
+  background:rgba(255,105,105,.12);
+  color:var(--red);
+  border:1px solid rgba(255,105,105,.2);
+}
+
+.btn:hover{transform:translateY(-1px)}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:15px;
+}
+
+.homework-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.homework-card{overflow:hidden}
+
+.homework-image{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:12px;
+  background:#111;
+  display:block;
+}
+
+.homework-content{padding-top:13px}
+
+.homework-title{
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:rgba(255,138,61,.1);
+  color:var(--orange);
+  border:1px solid rgba(255,138,61,.15);
+  padding:5px 8px;
+  border-radius:30px;
+  font-size:11px;
+  font-weight:750;
+}
+
+.status{
+  padding:5px 8px;
+  border-radius:30px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.status.pending{
+  color:var(--yellow);
+  background:rgba(255,209,102,.1);
+}
+
+.status.done{
+  color:var(--green);
+  background:rgba(69,212,131,.1);
+}
+
+.homework-meta{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:8px;
+}
+
+.announcement{
+  border-left:3px solid var(--orange);
+  background:var(--card2);
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:10px;
+}
+
+.announcement.pinned{
+  border-left-color:var(--yellow);
+}
+
+.announcement-title{font-weight:800}
+
+.announcement-body{
+  color:#bbb;
+  line-height:1.6;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.announcement-time{
+  color:#777;
+  font-size:11px;
+  margin-top:9px;
+}
+
+.search-box{max-width:400px}
+
+.search-results{margin-top:15px}
+
+.search-result{
+  padding:14px;
+  background:var(--card2);
+  border-radius:12px;
+  margin-bottom:8px;
+  cursor:pointer;
+}
+
+.profile-layout{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:18px;
+}
+
+.profile-card{text-align:center}
+
+.profile-avatar-wrap{
+  display:flex;
+  justify-content:center;
+  margin-bottom:14px;
+}
+
+.profile-avatar{
+  width:125px;
+  height:125px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#222;
+  border:3px solid rgba(255,138,61,.35);
+}
+
+.profile-card h2{margin:5px 0}
+
+.profile-subjects{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+  margin-top:15px;
+}
+
+.profile-subjects span{
+  font-size:10px;
+  color:#aaa;
+  background:#222;
+  padding:5px 7px;
+  border-radius:30px;
+}
+
+.notification-item{
+  display:flex;
+  gap:12px;
+  padding:15px;
+  border-bottom:1px solid var(--border);
+}
+
+.notification-item:last-child{border-bottom:0}
+
+.notification-dot{
+  width:9px;
+  height:9px;
+  background:var(--orange);
+  border-radius:50%;
+  margin-top:6px;
+  flex-shrink:0;
+}
+
+.empty{
+  padding:35px 15px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.mobile-top{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.menu-btn{
+  width:42px;
+  height:42px;
+  border:1px solid var(--border);
+  background:#171717;
+  color:white;
+  border-radius:11px;
+}
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:900;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.7);
+  z-index:2000;
+  padding:20px;
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+  width:min(600px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#171717;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.close{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:9px;
+  background:#252525;
+  color:white;
+}
+
+.preview{
+  width:100%;
+  max-height:300px;
+  object-fit:contain;
+  border-radius:12px;
+  background:#101010;
+  margin-top:12px;
+  display:none;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#202020;
+  border:1px solid var(--border);
+  color:white;
+  padding:13px 16px;
+  border-radius:12px;
+  box-shadow:0 15px 50px rgba(0,0,0,.4);
+  transform:translateY(100px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:3000;
+}
+
+.toast.show{
+  transform:none;
+  opacity:1;
+}
+
+@media(max-width:1050px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .routine-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .homework-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .subject-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:750px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:none;
+  }
+
+  .overlay.open{
+    display:block;
+  }
+
+  .main{
+    margin-left:0;
+    padding:16px;
+    padding-bottom:85px;
+  }
+
+  .mobile-top{
+    display:flex;
+  }
+
+  .hero{
+    padding:22px;
+  }
+
+  .hero h2{
+    font-size:25px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .two-col{
+    grid-template-columns:1fr;
+  }
+
+  .routine-grid{
+    grid-template-columns:1fr;
+  }
+
+  .homework-grid{
+    grid-template-columns:1fr;
+  }
+
+  .subject-grid{
+    grid-template-columns:1fr;
+  }
+
+  .profile-layout{
+    grid-template-columns:1fr;
+  }
+
+  .today-box{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .calendar-frame{
+    height:380px;
+  }
+
+  body::after{
+    font-size:32px;
+    letter-spacing:3px;
+  }
+}
+
+@media(max-width:480px){
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+
+  .stat-card{
+    padding:14px;
+  }
+
+  .stat-value{
+    font-size:20px;
+  }
+
+  body::after{
+    font-size:25px;
+    letter-spacing:2px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">11A</div>
+
+    <div>
+      <h1>Student Hub</h1>
+      <small>Class 11A</small>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <button class="active" onclick="showPage('home',this)">
+      🏠 Home
+    </button>
+
+    <button onclick="showPage('routine',this)">
+      🗓️ Routine
+    </button>
+
+    <button onclick="showPage('assessment',this)">
+      📸 Daily Assessment
+      <span id="assessmentBadge"
+            class="notification-badge"
+            style="display:none">0</span>
+    </button>
+
+    <button onclick="showPage('subjects',this)">
+      📚 Subjects
+    </button>
+
+    <button onclick="showPage('announcements',this)">
+      📢 Announcements
+    </button>
+
+    <button onclick="showPage('search',this)">
+      🔎 Search
+    </button>
+
+    <button onclick="showPage('notifications',this)">
+      🔔 Notifications
+      <span id="notificationBadge"
+            class="notification-badge"
+            style="display:none">0</span>
+    </button>
+
+    <button onclick="showPage('class',this)">
+      👥 Class 11A
+    </button>
+
+    <button onclick="showPage('profile',this)">
+      👤 Profile
+    </button>
+
+  </nav>
+
+</aside>
+
+
+<main class="main">
+
+  <div class="mobile-top">
+    <strong>11A Student Hub</strong>
+
+    <button class="menu-btn" onclick="openSidebar()">
+      ☰
+    </button>
+  </div>
+
+
+  <!-- HOME -->
+
+  <section id="home" class="page active">
+
+    <div class="hero">
+
+      <span class="eyebrow">CLASS 11A</span>
+
+      <h2 id="welcomeTitle">
+        Welcome to your Student Hub 👋
+      </h2>
+
+      <p>
+        Your class routine, Nepali calendar, holidays,
+        homework, announcements and class updates —
+        all in one place.
+      </p>
+
+    </div>
+
+
+    <div id="vacationBox" class="vacation">
+      Checking vacation status...
+    </div>
+
+
+    <div class="grid stats">
+
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">6</div>
+        <div class="stat-label">Subjects</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🗓️</div>
+        <div class="stat-value">5</div>
+        <div class="stat-label">Class Days</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📸</div>
+        <div id="homeworkCount" class="stat-value">0</div>
+        <div class="stat-label">Shared Homework</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📢</div>
+        <div id="announcementCount" class="stat-value">0</div>
+        <div class="stat-label">Announcements</div>
+      </div>
+
+    </div>
+
+
+    <div class="grid two-col">
+
+      <div class="card">
+
+        <div class="section-title">
+
+          <div>
+            <span class="eyebrow">TODAY</span>
+            <h2>Today's Classes</h2>
+          </div>
+
+        </div>
+
+        <div class="today-box">
+
+          <div>
+            <div id="todayDate" class="date-big">
+              --
+            </div>
+
+            <div id="todayDay" class="muted">
+              --
+            </div>
+          </div>
+
+        </div>
+
+        <div id="todayClasses" class="classes-list"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="section-title">
+
+          <div>
+            <span class="eyebrow">UPDATES</span>
+            <h2>Latest Announcements</h2>
+          </div>
+
+        </div>
+
+        <div id="homeAnnouncements"></div>
+
+      </div>
+
+    </div>
+
+
+    <div class="card" style="margin-top:18px">
+
+      <div class="section-title">
+
+        <div>
+          <span class="eyebrow">CALENDAR</span>
+          <h2>Nepali Calendar</h2>
+        </div>
+
+      </div>
+
+      <iframe
+        class="calendar-frame"
+        src="https://www.hamropatro.com/widgets/calendar-responsive.php"
+        title="Hamro Patro Calendar">
+      </iframe>
+
+    </div>
+
+
+    <div class="card" style="margin-top:18px">
+
+      <div class="section-title">
+
+        <div>
+          <span class="eyebrow">UPCOMING</span>
+          <h2>Upcoming Holidays</h2>
+        </div>
+
+      </div>
+
+      <iframe
+        class="holiday-frame"
+        src="https://www.hamropatro.com/widgets/upcomingHolidays.php"
+        title="Upcoming Nepali Holidays">
+      </iframe>
+
+    </div>
+
+  </section>
+
+
+  <!-- ROUTINE -->
+
+  <section id="routine" class="page">
+
+    <div class="section-title">
+
+      <div>
+        <span class="eyebrow">WEEKLY</span>
+        <h2>Class Routine</h2>
+      </div>
+
+    </div>
+
+    <div id="routineGrid" class="routine-grid"></div>
+
+  </section>
+
+
+  <!-- DAILY ASSESSMENT -->
+
+  <section id="assessment" class="page">
+
+    <div class="section-title">
+
+      <div>
+        <span class="eyebrow">HOMEWORK</span>
+        <h2>Daily Assessment</h2>
+      </div>
+
+      <button class="btn btn-primary"
+              onclick="openUploadModal()">
+        + Upload Homework
+      </button>
+
+    </div>
+
+
+    <div class="card" style="margin-bottom:18px">
+
+      <label>Filter by subject</label>
+
+      <select id="subjectFilter"
+              onchange="renderHomework()">
+
+        <option value="ALL">
+          All Subjects
+        </option>
+
+        <option>BUSINESS MATH</option>
+        <option>NEPALI</option>
+        <option>ENGLISH</option>
+        <option>SOCIAL</option>
+        <option>COMPUTER</option>
+        <option>ACCOUNTING</option>
+
+      </select>
+
+    </div>
+
+
+    <div id="homeworkGrid"
+         class="homework-grid"></div>
+
+  </section>
+
+
+  <!-- SUBJECTS -->
+
+  <section id="subjects" class="page">
+
+    <div class="section-title">
+
+      <div>
+        <span class="eyebrow">ACADEMICS</span>
+        <h2>Our Subjects</h2>
+      </div>
+
+    </div>
+
+
+    <div class="grid subject-grid">
+
+      <div class="card subject-card">
+        <div class="subject-number">01</div>
+
+        <h3>BUSINESS MATH</h3>
+
+        <p>
+          Mathematics concepts useful for business,
+          finance and accounting.
+        </p>
+      </div>
+
+
+      <div class="card subject-card">
+        <div class="subject-number">02</div>
+
+        <h3>NEPALI</h3>
+
+        <p>
+          Nepali language, literature, grammar
+          and communication.
+        </p>
+      </div>
+
+
+      <div class="card subject-card">
+        <div class="subject-number">03</div>
+
+        <h3>ENGLISH</h3>
+
+        <p>
+          English language, literature,
+          writing and communication skills.
+        </p>
+      </div>
+
+
+      <div class="card subject-card">
+        <div class="subject-number">04</div>
+
+        <h3>SOCIAL</h3>
+
+        <p>
+          Society, history, geography,
+          civics and social studies.
+        </p>
+      </div>
+
+
+      <div class="card subject-card">
+        <div class="subject-number">05</div>
+
+        <h3>COMPUTER</h3>
+
+        <p>
+          Computer science, technology
+          and digital concepts.
+        </p>
+      </div>
+
+
+      <div class="card subject-card">
+        <div class="subject-number">06</div>
+
+        <h3>ACCOUNTING</h3>
+
+        <p>
+          Accounting principles, records,
+          transactions and financial concepts.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ANNOUNCEMENTS -->
+
+  <section id="announcements" class="page">
+
+    <div class="section-title">
+
+      <div>
+        <span class="eyebrow">CLASS NEWS</span>
+        <h2>Announcements</h2>
+      </div>
+
+      <button class="btn btn-primary"
+              onclick="openAnnouncementModal()">
+        + Add Announcement
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <div id="announcementList"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SEARCH -->
+
+  <section id="search" class="page">
+
+    <div class="section-title">
+
+      <div>
+        <span class="eyebrow">FIND ANYTHING</span>
+        <h2>Search</h2>
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <input
+        id="searchInput"
+        class="search-box"
+        type="search"
+        placeholder="Search homework, subjects, announcements..."
+        oninput="performSearch()"
+      >
+
+      <div id="searchResults"
+           class="search-results">
+
+        <div class="empty">
+          Start typing to search.
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- NOTIFICATIONS -->
+
+  <section id="notifications" class="page">
+
+    <div class="section-title">
+
+      <div>
+        <span class="eyebrow">UPDATES</span>
+        <h2>Notifications</h2>
+      </div>
+
+      <button class="btn btn-secondary"
+              onclick="markNotificationsRead()">
+        Mark all read
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <div id="notificationList"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CLASS -->
+
+  <section id="class" class="page">
+
+    <div class="hero">
+
+      <span class="eyebrow">CLASS 11A</span>
+
+      <h2>Our Class 👥</h2>
+
+      <p>
+        A shared digital space for Class 11A students.
+        Homework uploaded here can be viewed by everyone
+        using the same Firebase project.
+      </p>
+
+    </div>
+
+
+    <div class="grid two-col">
+
+      <div class="card">
+
+        <h3>📌 Class Rules</h3>
+
+        <div class="announcement">
+
+          <div class="announcement-title">
+            Be respectful
+          </div>
+
+          <div class="announcement-body">
+            Keep class discussions helpful and respectful.
+          </div>
+
+        </div>
+
+
+        <div class="announcement">
+
+          <div class="announcement-title">
+            Use correct information
+          </div>
+
+          <div class="announcement-body">
+            Upload clear and useful homework
+            or class materials.
+          </div>
+
+        </div>
+
+
+        <div class="announcement">
+
+          <div class="announcement-title">
+            No spam
+          </div>
+
+          <div class="announcement-body">
+            Avoid unnecessary uploads
+            and duplicate posts.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>🚀 Shared Hub</h3>
+
+        <p class="muted"
+           style="line-height:1.7">
+
+          This dashboard is designed for Class 11A
+          students to share homework, announcements
+          and useful class information.
+
+        </p>
+
+
+        <div class="actions">
+
+          <button class="btn btn-primary"
+                  onclick="showPageByName('assessment')">
+            📸 View Homework
+          </button>
+
+          <button class="btn btn-secondary"
+                  onclick="showPageByName('routine')">
+            🗓️ View Routine
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PROFILE -->
+
+  <section id="profile" class="page">
+
+    <div class="section-title">
+
+      <div>
+        <span class="eyebrow">MY ACCOUNT</span>
+        <h2>My Profile</h2>
+      </div>
+
+    </div>
+
+
+    <div class="profile-layout">
+
+      <div class="card profile-card">
+
+        <div class="profile-avatar-wrap">
+
+          <img
+            id="profileAvatar"
+            class="profile-avatar"
+            alt="Profile photo"
+          >
+
+        </div>
+
+
+        <h2 id="profileDisplayName">
+          Your Name
+        </h2>
+
+        <div class="muted">
+          Class 11A
+        </div>
+
+
+        <div id="profileBioDisplay"
+             class="muted"
+             style="margin-top:10px">
+
+          Add a short bio from the profile settings.
+
+        </div>
+
+
+        <div class="profile-subjects">
+
+          <span>BUSINESS MATH</span>
+          <span>NEPALI</span>
+          <span>ENGLISH</span>
+          <span>SOCIAL</span>
+          <span>COMPUTER</span>
+          <span>ACCOUNTING</span>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>Edit Profile</h3>
+
+
+        <label>Your Name</label>
+
+        <input
+          id="profileName"
+          type="text"
+          placeholder="Example: Rahul"
+        >
+
+
+        <label>Short Bio</label>
+
+        <textarea
+          id="profileBio"
+          placeholder="Example: Class 11A student and football lover."
+        ></textarea>
+
+
+        <label>Profile Photo</label>
+
+        <input
+          id="profilePhoto"
+          type="file"
+          accept="image/*"
+          onchange="previewProfilePhoto(event)"
+        >
+
+
+        <div class="actions">
+
+          <button class="btn btn-primary"
+                  onclick="saveProfile()">
+            💾 Save Profile
+          </button>
+
+          <button class="btn btn-secondary"
+                  onclick="clearProfile()">
+            Reset
+          </button>
+
+        </div>
+
+
+        <p class="muted"
+           style="font-size:12px;line-height:1.6">
+
+          Your profile is saved on this device.
+          It is not automatically shared with other students.
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- UPLOAD MODAL -->
+
+<div id="uploadModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <h3>📸 Upload Homework</h3>
+
+      <button class="close"
+              onclick="closeUploadModal()">
+        ✕
+      </button>
+
+    </div>
+
+
+    <label>Subject</label>
+
+    <select id="assessmentSubject">
+
+      <option>BUSINESS MATH</option>
+      <option>NEPALI</option>
+      <option>ENGLISH</option>
+      <option>SOCIAL</option>
+      <option>COMPUTER</option>
+      <option>ACCOUNTING</option>
+
+    </select>
+
+
+    <label>Homework Title</label>
+
+    <input
+      id="assessmentTitle"
+      type="text"
+      placeholder="Example: Chapter 4 Exercise"
+    >
+
+
+    <label>Your Name</label>
+
+    <input
+      id="assessmentUser"
+      type="text"
+      placeholder="Example: Rahul"
+    >
+
+
+    <label>Homework Image</label>
+
+    <input
+      id="assessmentFile"
+      type="file"
+      accept="image/*"
+      onchange="previewHomework(event)"
+    >
+
+
+    <img
+      id="homeworkPreview"
+      class="preview"
+      alt="Homework preview"
+    >
+
+
+    <div class="actions">
+
+      <button
+        class="btn btn-primary"
+        id="uploadButton"
+        onclick="uploadHomework()">
+
+        🚀 Upload
+
+      </button>
+
+
+      <button
+        class="btn btn-secondary"
+        onclick="closeUploadModal()">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- IMAGE MODAL -->
+
+<div id="imageModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <h3>Homework</h3>
+
+      <button class="close"
+              onclick="closeImageModal()">
+        ✕
+      </button>
+
+    </div>
+
+
+    <img
+      id="fullHomeworkImage"
+      style="
+        width:100%;
+        max-height:70vh;
+        object-fit:contain;
+        border-radius:12px;
+        background:#0d0d0d
+      "
+      alt="Homework"
+    >
+
+  </div>
+
+</div>
+
+
+<!-- ANNOUNCEMENT MODAL -->
+
+<div id="announcementModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <h3>📢 New Announcement</h3>
+
+      <button class="close"
+              onclick="closeAnnouncementModal()">
+        ✕
+      </button>
+
+    </div>
+
+
+    <label>Title</label>
+
+    <input
+      id="announcementTitle"
+      type="text"
+      placeholder="Example: Tomorrow's class starts at 10 AM"
+    >
+
+
+    <label>Message</label>
+
+    <textarea
+      id="announcementBody"
+      placeholder="Write announcement..."
+    ></textarea>
+
+
+    <label>
+
+      <input
+        id="announcementPinned"
+        type="checkbox"
+        style="width:auto"
+      >
+
+      Pin announcement
+
+    </label>
+
+
+    <div class="actions">
+
+      <button class="btn btn-primary"
+              onclick="saveAnnouncement()">
+
+        📢 Publish
+
+      </button>
+
+      <button class="btn btn-secondary"
+              onclick="closeAnnouncementModal()">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp,
+  updateDoc
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+
+
+/* =========================================
+   FIREBASE CONFIG
+   ========================================= */
+
+const firebaseConfig = {
+
+  apiKey:"YOUR_API_KEY",
+
+  authDomain:"YOUR_PROJECT.firebaseapp.com",
+
+  projectId:"YOUR_PROJECT_ID",
+
+  storageBucket:"YOUR_PROJECT.firebasestorage.app",
+
+  messagingSenderId:"YOUR_MESSAGING_SENDER_ID",
+
+  appId:"YOUR_APP_ID"
+
+};
+
+
+let firebaseReady=false;
+let db=null;
+let storage=null;
+
+
+try{
+
+  if(
+    firebaseConfig.apiKey !== "YOUR_API_KEY" &&
+    firebaseConfig.projectId !== "YOUR_PROJECT_ID"
+  ){
+
+    const app=initializeApp(firebaseConfig);
+
+    db=getFirestore(app);
+
+    storage=getStorage(app);
+
+    firebaseReady=true;
+
+  }
+
+}catch(error){
+
+  console.error(
+    "Firebase initialization failed:",
+    error
+  );
+
+}
+
+
+/* =========================================
+   DATA
+   ========================================= */
+
+let homework=[];
+
+let announcements=[];
+
+
+const subjects=[
+  "BUSINESS MATH",
+  "NEPALI",
+  "ENGLISH",
+  "SOCIAL",
+  "COMPUTER",
+  "ACCOUNTING"
+];
+
+
+const routine={
+
+  Monday:[
+    "Business Math",
+    "Social",
+    "Social",
+    "English",
+    "Accounting"
+  ],
+
+  Tuesday:[
+    "Business Math",
+    "English",
+    "Social",
+    "Computer",
+    "Accounting"
+  ],
+
+  Wednesday:[
+    "Business Math",
+    "Nepali",
+    "English",
+    "Computer",
+    "Accounting"
+  ],
+
+  Thursday:[
+    "Math",
+    "Nepali",
+    "Social",
+    "Computer",
+    "Accounting"
+  ],
+
+  Friday:[
+    "Math",
+    "Nepali",
+    "English",
+    "Computer",
+    "Accounting"
+  ]
+
+};
+
+
+const vacationDates={
+
+  "2026-10-17":
+    "Dashain vacation begins — Fulpati",
+
+  "2026-10-18":
+    "Dashain vacation",
+
+  "2026-10-19":
+    "Dashain vacation",
+
+  "2026-10-20":
+    "Dashain vacation",
+
+  "2026-10-21":
+    "Dashain vacation — Bijaya Dashami",
+
+  "2026-10-22":
+    "Dashain vacation",
+
+  "2026-10-23":
+    "Dashain vacation",
+
+  "2026-11-08":
+    "Tihar vacation",
+
+  "2026-11-09":
+    "Tihar vacation",
+
+  "2026-11-10":
+    "Tihar vacation",
+
+  "2026-11-11":
+    "Tihar vacation — Bhai Tika",
+
+  "2026-11-12":
+    "Tihar vacation"
+
+};
+
+
+/* =========================================
+   PROFILE
+   ========================================= */
+
+let profile={};
+
+try{
+
+  profile=JSON.parse(
+    localStorage.getItem("11a_profile") || "{}"
+  );
+
+}catch{
+
+  profile={};
+
+}
+
+
+const defaultAvatar=
+  "data:image/svg+xml;charset=UTF-8,"+
+  encodeURIComponent(`
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="300"
+     height="300">
+
+  <rect width="300"
+        height="300"
+        fill="#222"/>
+
+  <circle
+    cx="150"
+    cy="110"
+    r="58"
+    fill="#555"/>
+
+  <path
+    d="M55 285c10-75 55-105 95-105s85 30 95 105"
+    fill="#555"/>
+
+</svg>
+
+`);
+
+
+function renderProfile(){
+
+  const name=
+    profile.name?.trim() ||
+    "Your Name";
+
+  const bio=
+    profile.bio?.trim() ||
+    "Add a short bio from the profile settings.";
+
+  document.getElementById("profileName")
+    .value=profile.name || "";
+
+  document.getElementById("profileBio")
+    .value=profile.bio || "";
+
+  document.getElementById("profileDisplayName")
+    .textContent=name;
+
+  document.getElementById("profileBioDisplay")
+    .textContent=bio;
+
+  document.getElementById("profileAvatar")
+    .src=profile.photo || defaultAvatar;
+
+  document.getElementById("welcomeTitle")
+    .textContent=
+      profile.name
+      ? `Welcome, ${profile.name} 👋`
+      : "Welcome to your Student Hub 👋";
+
+}
+
+
+window.previewProfilePhoto=function(event){
+
+  const file=
+    event.target.files?.[0];
+
+  if(!file)return;
+
+  if(!file.type.startsWith("image/")){
+
+    showToast(
+      "Please select an image."
+    );
+
+    return;
+
+  }
+
+  const reader=
+    new FileReader();
+
+  reader.onload=function(e){
+
+    const img=new Image();
+
+    img.onload=function(){
+
+      const maxSize=500;
+
+      let width=img.width;
+      let height=img.height;
+
+      if(
+        width>maxSize ||
+        height>maxSize
+      ){
+
+        const scale=
+          Math.min(
+            maxSize/width,
+            maxSize/height
+          );
+
+        width*=scale;
+        height*=scale;
+
+      }
+
+      const canvas=
+        document.createElement("canvas");
+
+      canvas.width=width;
+      canvas.height=height;
+
+      const ctx=
+        canvas.getContext("2d");
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        width,
+        height
+      );
+
+      profile.photo=
+        canvas.toDataURL(
+          "image/jpeg",
+          .75
+        );
+
+      document.getElementById("profileAvatar")
+        .src=profile.photo;
+
+    };
+
+    img.src=e.target.result;
+
+  };
+
+  reader.readAsDataURL(file);
+
+};
+
+
+window.saveProfile=function(){
+
+  profile.name=
+    document.getElementById("profileName")
+      .value.trim();
+
+  profile.bio=
+    document.getElementById("profileBio")
+      .value.trim();
+
+  try{
+
+    localStorage.setItem(
+      "11a_profile",
+      JSON.stringify(profile)
+    );
+
+    renderProfile();
+
+    showToast(
+      "Profile saved successfully!"
+    );
+
+  }catch(error){
+
+    showToast(
+      "Profile photo is too large."
+    );
+
+  }
+
+};
+
+
+window.clearProfile=function(){
+
+  if(!confirm(
+    "Reset your profile?"
+  ))return;
+
+  profile={};
+
+  localStorage.removeItem(
+    "11a_profile"
+  );
+
+  document.getElementById("profilePhoto")
+    .value="";
+
+  renderProfile();
+
+  showToast("Profile reset.");
+
+};
+
+
+/* =========================================
+   NAVIGATION
+   ========================================= */
+
+window.showPage=function(
+  pageId,
+  button
+){
+
+  document.querySelectorAll(".page")
+    .forEach(page=>
+      page.classList.remove("active")
+    );
+
+  document.getElementById(pageId)
+    ?.classList.add("active");
+
+  document.querySelectorAll(".nav button")
+    .forEach(btn=>
+      btn.classList.remove("active")
+    );
+
+  if(button){
+    button.classList.add("active");
+  }
+
+  closeSidebar();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+  if(pageId==="notifications")
+    renderNotifications();
+
+  if(pageId==="assessment")
+    renderHomework();
+
+  if(pageId==="announcements")
+    renderAnnouncements();
+
+};
+
+
+window.showPageByName=function(pageId){
+
+  const button=
+    [...document.querySelectorAll(".nav button")]
+      .find(btn=>
+        btn.getAttribute("onclick")
+          ?.includes(
+            `showPage('${pageId}'`
+          )
+      );
+
+  showPage(
+    pageId,
+    button
+  );
+
+};
+
+
+window.openSidebar=function(){
+
+  document.getElementById("sidebar")
+    .classList.add("open");
+
+  document.getElementById("overlay")
+    .classList.add("open");
+
+};
+
+
+window.closeSidebar=function(){
+
+  document.getElementById("sidebar")
+    .classList.remove("open");
+
+  document.getElementById("overlay")
+    .classList.remove("open");
+
+};
+
+
+/* =========================================
+   DATE
+   ========================================= */
+
+function getNepalDate(){
+
+  const parts=
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:"Asia/Kathmandu",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        weekday:"long"
+      }
+    ).formatToParts(
+      new Date()
+    );
+
+  const get=
+    type=>
+      parts.find(
+        x=>x.type===type
+      )?.value;
+
+  return{
+
+    year:get("year"),
+    month:get("month"),
+    day:get("day"),
+    weekday:get("weekday")
+
+  };
+
+}
+
+
+function getNepalDateKey(){
+
+  const d=getNepalDate();
+
+  return `${d.year}-${d.month}-${d.day}`;
+
+}
+
+
+/* =========================================
+   TODAY
+   ========================================= */
+
+function renderToday(){
+
+  const d=getNepalDate();
+
+  const formatted=
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:"Asia/Kathmandu",
+        month:"long",
+        day:"numeric",
+        year:"numeric"
+      }
+    ).format(
+      new Date()
+    );
+
+  document.getElementById("todayDate")
+    .textContent=formatted;
+
+  document.getElementById("todayDay")
+    .textContent=d.weekday;
+
+  const classes=
+    routine[d.weekday] || [];
+
+  const container=
+    document.getElementById(
+      "todayClasses"
+    );
+
+  if(!classes.length){
+
+    container.innerHTML=`
+      <div class="empty">
+        No regular classes today 🎉
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML=
+    classes.map(
+      (subject,index)=>`
+
+      <div class="class-row">
+
+        <span>
+          ${escapeHtml(subject)}
+        </span>
+
+        <span class="period">
+          Period ${index+1}
+        </span>
+
+      </div>
+
+    `
+    ).join("");
+
+}
+
+
+/* =========================================
+   ROUTINE
+   ========================================= */
+
+function renderRoutine(){
+
+  const today=
+    getNepalDate().weekday;
+
+  const days=[
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday"
+  ];
+
+  document.getElementById("routineGrid")
+    .innerHTML=
+      days.map(day=>{
+
+        const isToday=
+          today===day;
+
+        return`
+
+          <div class="day-card ${
+            isToday ? "today":""
+          }">
+
+            <div class="day-name">
+              ${day}
+            </div>
+
+            ${
+              isToday
+              ? `
+                <span class="today-tag">
+                  TODAY
+                </span>
+              `
+              :""
+            }
+
+            ${(routine[day]||[])
+              .map(
+                (subject,index)=>`
+
+                  <div class="routine-item">
+
+                    <strong>
+                      ${index+1}
+                    </strong>
+
+                    &nbsp;
+
+                    ${escapeHtml(subject)}
+
+                  </div>
+
+                `
+              ).join("")}
+
+          </div>
+
+        `;
+
+      }).join("");
+
+}
+
+
+/* =========================================
+   VACATION
+   ========================================= */
+
+function checkVacation(){
+
+  const key=
+    getNepalDateKey();
+
+  const box=
+    document.getElementById(
+      "vacationBox"
+    );
+
+  if(vacationDates[key]){
+
+    box.innerHTML=`
+
+      🌴 <strong>
+        Vacation today:
+      </strong>
+
+      ${escapeHtml(
+        vacationDates[key]
+      )}
+
+    `;
+
+    return;
+
+  }
+
+  const upcoming=
+    Object.keys(vacationDates)
+      .sort()
+      .find(
+        date=>date>key
+      );
+
+  if(upcoming){
+
+    box.innerHTML=`
+
+      🌴 <strong>
+        Next vacation:
+      </strong>
+
+      ${escapeHtml(
+        vacationDates[upcoming]
+      )}
+
+    `;
+
+  }else{
+
+    box.innerHTML=`
+
+      📚 <strong>
+        No upcoming vacation listed.
+      </strong>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================
+   FIREBASE HOMEWORK
+   ========================================= */
+
+function listenHomework(){
+
+  if(!firebaseReady){
+
+    homework=[];
+
+    renderHomework();
+
+    updateCounts();
+
+    return;
+
+  }
+
+  const q=
+    query(
+      collection(db,"homework"),
+      orderBy(
+        "createdAt",
+        "desc"
+      )
+    );
+
+  onSnapshot(
+    q,
+    snapshot=>{
+
+      homework=
+        snapshot.docs.map(
+          item=>({
+
+            id:item.id,
+            ...item.data()
+
+          })
+        );
+
+      renderHomework();
+
+      renderNotifications();
+
+      updateCounts();
+
+      performSearch();
+
+    },
+    error=>{
+
+      console.error(error);
+
+      showToast(
+        "Could not load shared homework."
+      );
+
+    }
+  );
+
+}
+
+
+window.uploadHomework=
+async function(){
+
+  if(!firebaseReady){
+
+    showToast(
+      "Connect Firebase first to upload shared homework."
+    );
+
+    return;
+
+  }
+
+  const subject=
+    document.getElementById(
+      "assessmentSubject"
+    ).value;
+
+  const title=
+    document.getElementById(
+      "assessmentTitle"
+    ).value.trim();
+
+  const user=
+    document.getElementById(
+      "assessmentUser"
+    ).value.trim();
+
+  const file=
+    document.getElementById(
+      "assessmentFile"
+    ).files?.[0];
+
+  if(
+    !title ||
+    !user ||
+    !file
+  ){
+
+    showToast(
+      "Please complete all fields."
+    );
+
+    return;
+
+  }
+
+  const button=
+    document.getElementById(
+      "uploadButton"
+    );
+
+  button.disabled=true;
+  button.textContent=
+    "Uploading...";
+
+  try{
+
+    const safeName=
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
+      );
+
+    const path=
+      `homework/${Date.now()}_${safeName}`;
+
+    const storageRef=
+      ref(
+        storage,
+        path
+      );
+
+    await uploadBytes(
+      storageRef,
+      file
+    );
+
+    const imageUrl=
+      await getDownloadURL(
+        storageRef
+      );
+
+    await addDoc(
+      collection(db,"homework"),
+      {
+
+        subject,
+        title,
+        uploader:user,
+        imageUrl,
+        storagePath:path,
+        status:"pending",
+        createdAt:
+          serverTimestamp()
+
+      }
+    );
+
+    closeUploadModal();
+
+    document.getElementById(
+      "assessmentTitle"
+    ).value="";
+
+    document.getElementById(
+      "assessmentFile"
+    ).value="";
+
+    document.getElementById(
+      "homeworkPreview"
+    ).style.display="none";
+
+    showToast(
+      "Homework uploaded successfully!"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Upload failed. Check Firebase Storage rules."
+    );
+
+  }finally{
+
+    button.disabled=false;
+
+    button.textContent=
+      "🚀 Upload";
+
+  }
+
+};
+
+
+window.deleteHomework=
+async function(id){
+
+  if(!firebaseReady)return;
+
+  const item=
+    homework.find(
+      h=>h.id===id
+    );
+
+  if(!item)return;
+
+  if(!confirm(
+    "Delete this homework upload?"
+  ))return;
+
+  try{
+
+    await deleteDoc(
+      doc(
+        db,
+        "homework",
+        id
+      )
+    );
+
+    if(item.storagePath){
+
+      try{
+
+        await deleteObject(
+          ref(
+            storage,
+            item.storagePath
+          )
+        );
+
+      }catch(storageError){
+
+        console.warn(
+          storageError
+        );
+
+      }
+
+    }
+
+    showToast(
+      "Homework deleted."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Could not delete homework."
+    );
+
+  }
+
+};
+
+
+window.toggleHomeworkStatus=
+async function(id){
+
+  if(!firebaseReady)return;
+
+  const item=
+    homework.find(
+      h=>h.id===id
+    );
+
+  if(!item)return;
+
+  try{
+
+    await updateDoc(
+      doc(
+        db,
+        "homework",
+        id
+      ),
+      {
+
+        status:
+          item.status==="done"
+          ? "pending"
+          : "done"
+
+      }
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Could not update status."
+    );
+
+  }
+
+};
+
+
+function renderHomework(){
+
+  const container=
+    document.getElementById(
+      "homeworkGrid"
+    );
+
+  const filter=
+    document.getElementById(
+      "subjectFilter"
+    )?.value || "ALL";
+
+  const items=
+    homework.filter(
+      item=>
+        filter==="ALL" ||
+        item.subject===filter
+    );
+
+  if(!items.length){
+
+    container.innerHTML=`
+
+      <div
+        class="card"
+        style="grid-column:1/-1">
+
+        <div class="empty">
+
+          ${
+            firebaseReady
+            ? "No homework uploaded yet 📚"
+            : "Connect Firebase to view shared homework."
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML=
+    items.map(item=>{
+
+      const date=
+        item.createdAt?.toDate
+        ? item.createdAt.toDate()
+        : null;
+
+      const dateText=
+        date
+        ? new Intl.DateTimeFormat(
+            "en-US",
+            {
+              dateStyle:"medium",
+              timeStyle:"short"
+            }
+          ).format(date)
+        : "Recently uploaded";
+
+      const status=
+        item.status==="done"
+        ? "done"
+        : "pending";
+
+
+      return`
+
+        <div class="card homework-card">
+
+          <img
+
+            class="homework-image"
+
+            src="${escapeAttribute(
+              item.imageUrl || ""
+            )}"
+
+            alt="Homework"
+
+            onclick="openImageModal(
+              '${escapeAttribute(
+                item.imageUrl || ""
+              )}'
+            )"
+
+            style="cursor:pointer"
+
+          >
+
+
+          <div class="homework-content">
+
+            <span class="tag">
+
+              ${escapeHtml(
+                item.subject ||
+                "Subject"
+              )}
+
+            </span>
+
+
+            <div
+              class="homework-title"
+              style="margin-top:10px">
+
+              ${escapeHtml(
+                item.title ||
+                "Homework"
+              )}
+
+            </div>
+
+
+            <div class="homework-meta">
+
+              Uploaded by
+
+              <strong>
+                ${escapeHtml(
+                  item.uploader ||
+                  "Student"
+                )}
+              </strong>
+
+            </div>
+
+
+            <div class="homework-meta">
+              ${escapeHtml(dateText)}
+            </div>
+
+
+            <div class="actions">
+
+              <span class="status ${status}">
+
+                ${
+                  status==="done"
+                  ? "✓ Completed"
+                  : "⏳ Pending"
+                }
+
+              </span>
+
+
+              <button
+                class="btn btn-secondary"
+                onclick="toggleHomeworkStatus(
+                  '${item.id}'
+                )">
+
+                ${
+                  status==="done"
+                  ? "Mark Pending"
+                  : "Mark Done"
+                }
+
+              </button>
+
+
+              <button
+                class="btn btn-danger"
+                onclick="deleteHomework(
+                  '${item.id}'
+                )">
+
+                Delete
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================
+   ANNOUNCEMENTS
+   ========================================= */
+
+const defaultAnnouncements=[
+
+  {
+
+    id:"default-1",
+
+    title:
+      "Welcome to Class 11A Hub 🎉",
+
+    body:
+      "Use this dashboard to check the routine, homework, holidays and class updates.",
+
+    pinned:true,
+
+    createdAt:
+      new Date()
+
+  },
+
+  {
+
+    id:"default-2",
+
+    title:
+      "Keep homework uploads clear",
+
+    body:
+      "Please upload readable homework photos and select the correct subject.",
+
+    pinned:false,
+
+    createdAt:
+      new Date()
+
+  }
+
+];
+
+
+function loadLocalAnnouncements(){
+
+  try{
+
+    const saved=
+      JSON.parse(
+        localStorage.getItem(
+          "11a_announcements"
+        ) || "[]"
+      );
+
+    announcements=[
+      ...saved,
+      ...defaultAnnouncements
+    ];
+
+  }catch{
+
+    announcements=[
+      ...defaultAnnouncements
+    ];
+
+  }
+
+  sortAnnouncements();
+
+}
+
+
+function sortAnnouncements(){
+
+  announcements.sort(
+    (a,b)=>{
+
+      if(
+        !!a.pinned !==
+        !!b.pinned
+      ){
+
+        return a.pinned
+          ? -1
+          : 1;
+
+      }
+
+      const aTime=
+        a.createdAt?.seconds
+        ? a.createdAt.seconds*1000
+        : new Date(
+            a.createdAt || 0
+          ).getTime();
+
+      const bTime=
+        b.createdAt?.seconds
+        ? b.createdAt.seconds*1000
+        : new Date(
+            b.createdAt || 0
+          ).getTime();
+
+      return bTime-aTime;
+
+    }
+  );
+
+}
+
+
+function renderAnnouncements(){
+
+  sortAnnouncements();
+
+  const container=
+    document.getElementById(
+      "announcementList"
+    );
+
+  const homeContainer=
+    document.getElementById(
+      "homeAnnouncements"
+    );
+
+
+  if(!announcements.length){
+
+    container.innerHTML=`
+      <div class="empty">
+        No announcements yet.
+      </div>
+    `;
+
+    homeContainer.innerHTML=`
+      <div class="empty">
+        No announcements yet.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  const html=
+    announcements.map(
+      item=>{
+
+        const time=
+          item.createdAt?.seconds
+          ? new Date(
+              item.createdAt.seconds*1000
+            )
+          : new Date(
+              item.createdAt ||
+              Date.now()
+            );
+
+        return`
+
+          <div class="announcement ${
+            item.pinned
+            ? "pinned"
+            : ""
+          }">
+
+            <div class="announcement-title">
+
+              ${item.pinned
+                ? "📌 "
+                : ""}
+
+              ${escapeHtml(
+                item.title
+              )}
+
+            </div>
+
+
+            <div class="announcement-body">
+
+              ${escapeHtml(
+                item.body
+              )}
+
+            </div>
+
+
+            <div class="announcement-time">
+
+              ${time.toLocaleString()}
+
+            </div>
+
+
+            ${
+              !String(
+                item.id
+              ).startsWith(
+                "default-"
+              )
+
+              ? `
+
+                <div class="actions">
+
+                  <button
+                    class="btn btn-danger"
+                    onclick="deleteAnnouncement(
+                      '${item.id}'
+                    )">
+
+                    Delete
+
+                  </button>
+
+                </div>
+
+              `
+              :""
+            }
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
+
+  container.innerHTML=html;
+
+
+  homeContainer.innerHTML=
+    announcements
+      .slice(0,3)
+      .map(
+        item=>`
+
+          <div
+            class="announcement ${
+              item.pinned
+              ? "pinned"
+              : ""
+            }">
+
+            <div
+              class="announcement-title">
+
+              ${item.pinned
+                ? "📌 "
+                : ""}
+
+              ${escapeHtml(
+                item.title
+              )}
+
+            </div>
+
+
+            <div class="announcement-body">
+
+              ${escapeHtml(
+                item.body
+              )}
+
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+
+  updateCounts();
+
+}
+
+
+window.saveAnnouncement=function(){
+
+  const title=
+    document.getElementById(
+      "announcementTitle"
+    ).value.trim();
+
+  const body=
+    document.getElementById(
+      "announcementBody"
+    ).value.trim();
+
+  const pinned=
+    document.getElementById(
+      "announcementPinned"
+    ).checked;
+
+
+  if(!title || !body){
+
+    showToast(
+      "Please enter title and message."
+    );
+
+    return;
+
+  }
+
+
+  const newAnnouncement={
+
+    id:
+      "local-"+Date.now(),
+
+    title,
+
+    body,
+
+    pinned,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  let saved=[];
+
+  try{
+
+    saved=
+      JSON.parse(
+        localStorage.getItem(
+          "11a_announcements"
+        ) || "[]"
+      );
+
+  }catch{
+
+    saved=[];
+
+  }
+
+
+  saved.unshift(
+    newAnnouncement
+  );
+
+
+  localStorage.setItem(
+    "11a_announcements",
+    JSON.stringify(saved)
+  );
+
+
+  announcements.unshift(
+    newAnnouncement
+  );
+
+
+  sortAnnouncements();
+
+  renderAnnouncements();
+
+  closeAnnouncementModal();
+
+
+  document.getElementById(
+    "announcementTitle"
+  ).value="";
+
+  document.getElementById(
+    "announcementBody"
+  ).value="";
+
+  document.getElementById(
+    "announcementPinned"
+  ).checked=false;
+
+
+  showToast(
+    "Announcement added on this device."
+  );
+
+};
+
+
+window.deleteAnnouncement=
+function(id){
+
+  if(!confirm(
+    "Delete this announcement?"
+  ))return;
+
+  let saved=[];
+
+  try{
+
+    saved=
+      JSON.parse(
+        localStorage.getItem(
+          "11a_announcements"
+        ) || "[]"
+      );
+
+  }catch{
+
+    saved=[];
+
+  }
+
+
+  saved=
+    saved.filter(
+      item=>item.id!==id
+    );
+
+
+  localStorage.setItem(
+    "11a_announcements",
+    JSON.stringify(saved)
+  );
+
+
+  announcements=
+    announcements.filter(
+      item=>item.id!==id
+    );
+
+
+  renderAnnouncements();
+
+  showToast(
+    "Announcement deleted."
+  );
+
+};
+
+
+/* =========================================
+   SEARCH
+   ========================================= */
+
+window.performSearch=function(){
+
+  const queryText=
+    document.getElementById(
+      "searchInput"
+    )?.value.trim().toLowerCase();
+
+  const container=
+    document.getElementById(
+      "searchResults"
+    );
+
+
+  if(!queryText){
+
+    container.innerHTML=`
+
+      <div class="empty">
+        Start typing to search.
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const results=[];
+
+
+  homework.forEach(item=>{
+
+    const text=
+      `${item.title}
+       ${item.subject}
+       ${item.uploader}`
+        .toLowerCase();
+
+    if(text.includes(queryText)){
+
+      results.push({
+
+        type:"📸 Homework",
+
+        title:item.title,
+
+        info:item.subject,
+
+        action:"assessment"
+
+      });
+
+    }
+
+  });
+
+
+  announcements.forEach(item=>{
+
+    const text=
+      `${item.title}
+       ${item.body}`
+        .toLowerCase();
+
+    if(text.includes(queryText)){
+
+      results.push({
+
+        type:"📢 Announcement",
+
+        title:item.title,
+
+        info:item.body,
+
+        action:"announcements"
+
+      });
+
+    }
+
+  });
+
+
+  subjects.forEach(subject=>{
+
+    if(
+      subject
+        .toLowerCase()
+        .includes(queryText)
+    ){
+
+      results.push({
+
+        type:"📚 Subject",
+
+        title:subject,
+
+        info:"Class 11A subject",
+
+        action:"subjects"
+
+      });
+
+    }
+
+  });
+
+
+  if(!results.length){
+
+    container.innerHTML=`
+
+      <div class="empty">
+
+        No results found for
+
+        "<strong>
+          ${escapeHtml(queryText)}
+        </strong>"
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML=
+    results.map(
+      result=>`
+
+        <div
+          class="search-result"
+          onclick="showPageByName(
+            '${result.action}'
+          )">
+
+          <div class="tag">
+
+            ${escapeHtml(
+              result.type
+            )}
+
+          </div>
+
+
+          <div
+            style="
+              font-weight:800;
+              margin-top:8px
+            ">
+
+            ${escapeHtml(
+              result.title
+            )}
+
+          </div>
+
+
+          <div
+            class="muted"
+            style="
+              font-size:12px;
+              margin-top:4px
+            ">
+
+            ${escapeHtml(
+              result.info
+            )}
+
+          </div>
+
+        </div>
+
+      `
+    ).join("");
+
+};
+
+
+/* =========================================
+   NOTIFICATIONS
+   ========================================= */
+
+function getReadTimestamp(){
+
+  return Number(
+    localStorage.getItem(
+      "11a_notifications_read"
+    ) || 0
+  );
+
+}
+
+
+function renderNotifications(){
+
+  const container=
+    document.getElementById(
+      "notificationList"
+    );
+
+  const readAt=
+    getReadTimestamp();
+
+
+  const items=
+    homework
+      .slice(0,15)
+      .map(item=>{
+
+        const timestamp=
+          item.createdAt?.seconds
+          ? item.createdAt.seconds*1000
+          : Date.now();
+
+        return{
+
+          timestamp,
+
+          title:
+            `New ${item.subject} homework`,
+
+          body:
+            `${item.title} uploaded by ${
+              item.uploader ||
+              "student"
+            }`,
+
+          unread:
+            timestamp>readAt
+
+        };
+
+      });
+
+
+  if(!items.length){
+
+    container.innerHTML=`
+
+      <div class="empty">
+        No notifications yet 🔔
+      </div>
+
+    `;
+
+    updateNotificationBadges();
+
+    return;
+
+  }
+
+
+  container.innerHTML=
+    items.map(
+      item=>`
+
+        <div class="notification-item">
+
+          <div
+            class="notification-dot"
+            style="${
+              item.unread
+              ? ""
+              : "background:#444"
+            }">
+          </div>
+
+
+          <div>
+
+            <div style="font-weight:800">
+
+              ${escapeHtml(
+                item.title
+              )}
+
+            </div>
+
+
+            <div
+              class="muted"
+              style="
+                font-size:13px;
+                margin-top:4px
+              ">
+
+              ${escapeHtml(
+                item.body
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `
+    ).join("");
+
+
+  updateNotificationBadges();
+
+}
+
+
+window.markNotificationsRead=
+function(){
+
+  localStorage.setItem(
+    "11a_notifications_read",
+    String(Date.now())
+  );
+
+  renderNotifications();
+
+  showToast(
+    "Notifications marked as read."
+  );
+
+};
+
+
+function updateNotificationBadges(){
+
+  const readAt=
+    getReadTimestamp();
+
+  const unread=
+    homework.filter(item=>{
+
+      const timestamp=
+        item.createdAt?.seconds
+        ? item.createdAt.seconds*1000
+        : Date.now();
+
+      return timestamp>readAt;
+
+    }).length;
+
+
+  const badges=[
+
+    document.getElementById(
+      "notificationBadge"
+    ),
+
+    document.getElementById(
+      "assessmentBadge"
+    )
+
+  ];
+
+
+  badges.forEach(badge=>{
+
+    if(!badge)return;
+
+    badge.textContent=
+      unread>99
+      ? "99+"
+      : unread;
+
+    badge.style.display=
+      unread
+      ? "grid"
+      : "none";
+
+  });
+
+}
+
+
+/* =========================================
+   COUNTS
+   ========================================= */
+
+function updateCounts(){
+
+  document.getElementById(
+    "homeworkCount"
+  ).textContent=
+    homework.length;
+
+  document.getElementById(
+    "announcementCount"
+  ).textContent=
+    announcements.length;
+
+  updateNotificationBadges();
+
+}
+
+
+/* =========================================
+   MODALS
+   ========================================= */
+
+window.openUploadModal=function(){
+
+  document.getElementById(
+    "uploadModal"
+  ).classList.add("show");
+
+
+  if(
+    profile.name &&
+    !document.getElementById(
+      "assessmentUser"
+    ).value
+  ){
+
+    document.getElementById(
+      "assessmentUser"
+    ).value=
+      profile.name;
+
+  }
+
+};
+
+
+window.closeUploadModal=function(){
+
+  document.getElementById(
+    "uploadModal"
+  ).classList.remove("show");
+
+};
+
+
+window.previewHomework=function(event){
+
+  const file=
+    event.target.files?.[0];
+
+  const preview=
+    document.getElementById(
+      "homeworkPreview"
+    );
+
+
+  if(!file){
+
+    preview.style.display="none";
+
+    return;
+
+  }
+
+
+  const reader=
+    new FileReader();
+
+
+  reader.onload=e=>{
+
+    preview.src=
+      e.target.result;
+
+    preview.style.display=
+      "block";
+
+  };
+
+
+  reader.readAsDataURL(file);
+
+};
+
+
+window.openImageModal=function(url){
+
+  if(!url)return;
+
+  document.getElementById(
+    "fullHomeworkImage"
+  ).src=url;
+
+  document.getElementById(
+    "imageModal"
+  ).classList.add("show");
+
+};
+
+
+window.closeImageModal=function(){
+
+  document.getElementById(
+    "imageModal"
+  ).classList.remove("show");
+
+};
+
+
+window.openAnnouncementModal=function(){
+
+  document.getElementById(
+    "announcementModal"
+  ).classList.add("show");
+
+};
+
+
+window.closeAnnouncementModal=function(){
+
+  document.getElementById(
+    "announcementModal"
+  ).classList.remove("show");
+
+};
+
+
+/* =========================================
+   TOAST
+   ========================================= */
+
+let toastTimer;
+
+
+function showToast(message){
+
+  const toast=
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent=message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=
+    setTimeout(
+      ()=>{
+        toast.classList.remove(
+          "show"
+        );
+      },
+      2800
+    );
+
+}
+
+
+/* =========================================
+   ESCAPE
+   ========================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+  return escapeHtml(value)
+    .replaceAll("`","&#096;");
+
+}
+
+
+/* =========================================
+   INIT
+   ========================================= */
+
+renderProfile();
+
+renderToday();
+
+renderRoutine();
+
+checkVacation();
+
+loadLocalAnnouncements();
+
+renderAnnouncements();
+
+renderNotifications();
+
+updateCounts();
+
+listenHomework();
+
+
+setInterval(
+  ()=>{
+    renderToday();
+    renderRoutine();
+    checkVacation();
+  },
+  60000
+);
+
+
+document.querySelectorAll(".modal")
+.forEach(modal=>{
+
+  modal.addEventListener(
+    "click",
+    event=>{
+
+      if(event.target===modal){
+
+        modal.classList.remove(
+          "show"
+        );
+
+      }
+
+    }
+  );
+
+});
+
+</script>
+
+</body>
+</html>
